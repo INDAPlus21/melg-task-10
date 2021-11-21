@@ -11,7 +11,7 @@ alive(Row, Column, BoardFileName):-
     read(Board),            % Reads the first Prolog-term from the file
     seen,                   % Closes the io-stream
     nth1_2d(Row, Column, Board, Stone),
-    not(Stone = e),
+    not(Stone = e),         % Fail if selected tile is empty
     rec(Row, Column, Board, Stone, []) -> 
         write(group is alive);
         write(group is dead).
@@ -33,9 +33,10 @@ rec(Row, Column, Board, OriginalStone, Visited):-
 
 % Main recursion
 rec(Row, Column, Board, OriginalStone, Visited):-
-    not(member([Row, Column], Visited)),
+    not(member([Row, Column], Visited)), % Make sure that the tile hasn't been visited before to prevent infinite recursion
     nth1_2d(Row, Column, Board, Stone), % Get stone at position
-    (Stone = OriginalStone), 
+    (Stone = OriginalStone),            % Stone has to be in
+    % Continue in all four directions 
     NewRow is Row - 1,
     NewRow2 is Row + 1,
     NewColumn is Column - 1,
