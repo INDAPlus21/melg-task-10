@@ -12,7 +12,9 @@ alive(Row, Column, BoardFileName):-
     seen,                   % Closes the io-stream
     nth1_2d(Row, Column, Board, Stone),
     not(Stone = e),
-    rec(Row, Column, Board, Stone, []).
+    rec(Row, Column, Board, Stone, []) -> 
+        write(group is alive);
+        write(group is dead).
 
 % Outside board
 rec(0, _, _, _, _):-
@@ -33,14 +35,14 @@ rec(Row, Column, Board, OriginalStone, Visited):-
 rec(Row, Column, Board, OriginalStone, Visited):-
     not(member([Row, Column], Visited)),
     nth1_2d(Row, Column, Board, Stone), % Get stone at position
-    write(Row),
-    write(Column),
     (Stone = OriginalStone), 
     NewRow is Row - 1,
     NewRow2 is Row + 1,
     NewColumn is Column - 1,
     NewColumn2 is Column + 1,
-    rec(NewRow, Column, Board, OriginalStone, [[Row, Column]|Visited]);    
-    rec(NewRow2, Column, Board, OriginalStone, [[Row, Column]|Visited]);
-    rec(Row, NewColumn, Board, OriginalStone, [[Row, Column]|Visited]);
-    rec(Row, NewColumn2, Board, OriginalStone, [[Row, Column]|Visited]).
+    (
+        rec(NewRow, Column, Board, OriginalStone, [[Row, Column]|Visited]);    
+        rec(NewRow2, Column, Board, OriginalStone, [[Row, Column]|Visited]);
+        rec(Row, NewColumn, Board, OriginalStone, [[Row, Column]|Visited]);
+        rec(Row, NewColumn2, Board, OriginalStone, [[Row, Column]|Visited])
+    ).
