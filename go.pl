@@ -13,8 +13,8 @@ alive(Row, Column, BoardFileName):-
     nth1_2d(Row, Column, Board, Stone),
     not(Stone = e),         % Fail if selected tile is empty
     rec(Row, Column, Board, Stone, []) -> 
-        write(group is alive);
-        write(group is dead).
+        (write(group is alive), true);
+        (write(group is dead), false).
 
 % Outside board
 rec(0, _, _, _, _):-
@@ -27,7 +27,7 @@ rec(_, 10, _, _, _):-
     false, !.
 
 % Found empty
-rec(Row, Column, Board, OriginalStone, Visited):-
+rec(Row, Column, Board, _, _):-
     nth1_2d(Row, Column, Board, Stone),
     Stone = e, !.
 
